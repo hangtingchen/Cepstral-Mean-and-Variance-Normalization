@@ -1,6 +1,7 @@
 # Cepstral_Mean_and_Variance_Normalization
 
 ## 使用方法
+你需要使用[BasicAudioToolBox](https://github.com/hangtingchen/BasicAudioToolBox)的相关库，包括fileIO,hmath,sigProcess
 ```Shell
 CMVN.exe	<input dir>	<output dir>	<fileList>	<Orders of delta>	<MODE>
 ```
