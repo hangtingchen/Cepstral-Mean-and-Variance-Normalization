@@ -9,16 +9,63 @@
 #define regressWin 2
 
 int main(int argc, char** argv) {
-	printf("The programs calculates CMVN in different modes. It is a project for ASR\n");
+	FILE* fileList = NULL;
+	int diffOrder = -1; 
+	int mode = -1;
 
-	FILE* fileList = fopen(argv[3],"r");
-	OfflineNorm(fileList, argv[1], argv[2],atoi(argv[4]),regressWin);
-	fclose(fileList);
+	printf("The programs calculates CMVN in different modes. It is a project for ASR\n\n");
+	if (argc != 6 ) {
+		printf("%d\n", argc);
+		printf("ERROR INPUT!!!\n");
+		printf("Usage : CMVN.exe\t<input dir>\t<output dir>\t<fileList>\t<Orders of delta>\t<MODE>\n\n");
+		printf("For exmaple,open CMD in the dir containing .exe file and executive\n");
+		printf("\tCMVN.exe\tFeatureDim15\tnew\tfileList.txt\t3\t2\n");
+		system("pause");
+		return 1;
+	}
 
-	fileList = fopen(argv[3], "r");
-	GlobalNorm(fileList, argv[1], argv[2],atoi(argv[4]),regressWin);
-	fclose(fileList);
+	diffOrder = atoi(argv[4]);
+	mode =  atoi(argv[5]);
+	if (mode > 2 || mode < 0 || diffOrder < 0) {
+		printf("ERROR INPUT!!!\n");
+		printf("<Orders of delta> >=0 \n");
+		printf("<MODE> >=0 and <=2\n");
+		system("pause");
+		return 1;
+	}
 
-	system("pause");
-	return 0;
+	{
+		printf("Config : \n");
+		printf("<input dir>\t%s\n",argv[1]);
+		printf("<output dir>\t%s\n", argv[2]);
+		printf("<fileList>\t%s\n", argv[3]);
+		printf("<regress order>\t%d\n", diffOrder);
+	}
+
+	if (mode == 0) {
+		printf("<MODE>\tRegress and no CMVN\n\n");
+		fileList = fopen(argv[3], "r");
+		RegressBinaryFile(fileList, argv[1], argv[2], diffOrder, regressWin);
+		fclose(fileList);
+		system("pause");
+		return 0;
+	}
+
+	if (mode == 1) {
+		printf("<MODE>\tOffline Norm\n\n");
+		fileList = fopen(argv[3], "r");
+		OfflineNorm(fileList, argv[1], argv[2], diffOrder, regressWin);
+		fclose(fileList);
+		system("pause");
+		return 0;
+	}
+
+	if (mode == 2) {
+		printf("<MODE>\tGlobal Norm\n\n");
+		fileList = fopen(argv[3], "r");
+		GlobalNorm(fileList, argv[1], argv[2], diffOrder, regressWin);
+		fclose(fileList);
+		system("pause");
+		return 0;
+	}
 }
